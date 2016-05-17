@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -116,6 +117,15 @@ public abstract class RecordsAdapter extends RecyclerView.Adapter<RecyclerView.V
                         }
                     });
             holder.setPriceSubscription(subscription);
+        }
+        if (position == recordList.size() - 1) {
+            DisplayMetrics metrics = holder.getBinding().getRoot().getResources().getDisplayMetrics();
+            float density = metrics.density;
+            holder.getBinding().layourEntry.setPadding(
+                    (int) (16 * density),
+                    (int) (16 * density),
+                    (int) (16 * density),
+                    (int) (16 * density));
         }
     }
 
