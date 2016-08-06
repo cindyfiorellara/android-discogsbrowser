@@ -83,6 +83,12 @@ public abstract class RecordsAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     protected void onBindViewHolder(final RecordViewHolder holder, int position) {
+        loadAlbumArt(holder, position);
+        showPrice(holder, position);
+        adjustPadding(holder, position);
+    }
+
+    private void loadAlbumArt(RecordViewHolder holder, int position) {
         holder.getBinding().setRecord(recordList.get(position));
         if (!recordList.get(position).getBasicInformation().getThumb().isEmpty()) {
             picasso.load(recordList.get(position).getBasicInformation().getThumb())
@@ -92,6 +98,9 @@ public abstract class RecordsAdapter extends RecyclerView.Adapter<RecyclerView.V
                     .centerCrop()
                     .into(holder.getBinding().recordThumb);
         }
+    }
+
+    private void showPrice(final RecordViewHolder holder, int position) {
         boolean showPrices = settings.getSharedPreferences().getBoolean(getPreferencePrices(), getPreferencePricesDefault());
         if (showPrices) {
             String type = settings.getSharedPreferences().getString(getPreferencePricesType(), "0");
@@ -118,15 +127,16 @@ public abstract class RecordsAdapter extends RecyclerView.Adapter<RecyclerView.V
                     });
             holder.setPriceSubscription(subscription);
         }
-        if (position == recordList.size() - 1) {
-            DisplayMetrics metrics = holder.getBinding().getRoot().getResources().getDisplayMetrics();
-            float density = metrics.density;
-            holder.getBinding().layourEntry.setPadding(
-                    (int) (16 * density),
-                    (int) (16 * density),
-                    (int) (16 * density),
-                    (int) (16 * density));
-        }
+    }
+
+    private void adjustPadding(RecordViewHolder holder, int position) {
+        DisplayMetrics metrics = holder.getBinding().getRoot().getResources().getDisplayMetrics();
+        float density = metrics.density;
+        holder.getBinding().layourEntry.setPadding(
+                (int) (16 * density),
+                position == 0 ? (int) (16 * density) : 0,
+                (int) (16 * density),
+                (int) (16 * density));
     }
 
     @Override
